@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vapi Inline Voice Demo</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --panel: #0f1524;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #52e2b2;
+        --accent-dark: #36b98f;
+        --danger: #ff6b6b;
+        --border: rgba(129, 140, 248, 0.7);
+        --glow: rgba(59, 130, 246, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Avenir", "Helvetica Neue", Arial, sans-serif;
+        background: transparent;
+        color: var(--text);
+        padding: 6px 8px 0;
+        display: flex;
+        justify-content: center;
+      }
+      .card {
+        width: min(760px, 100%);
+        background: radial-gradient(circle at top left, rgba(15, 18, 30, 0.98), rgba(10, 13, 25, 0.98));
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 18px 20px;
+        box-shadow:
+          0 0 0 1px rgba(8, 11, 20, 1),
+          0 0 30px var(--glow);
+        margin: 0 auto;
+      }
+      .header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 14px;
+        text-align: left;
+      }
+      .title {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: -0.02em;
+        text-align: left;
+        width: 100%;
+      }
+      .status {
+        font-size: 14px;
+        color: var(--muted);
+        text-align: left;
+        width: 100%;
+        justify-self: end;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 10px;
+        justify-content: flex-start;
+      }
+      button {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.12s ease, background 0.2s ease;
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      .btn-start {
+        background: var(--accent);
+        color: #0d1217;
+      }
+      .btn-start:hover {
+        background: var(--accent-dark);
+      }
+      .btn-stop {
+        background: var(--danger);
+        color: #111;
+      }
+      .btn-mute {
+        background: rgba(15, 23, 42, 0.85);
+        color: var(--text);
+        border: 1px solid rgba(129, 140, 248, 0.9);
+        box-shadow:
+          0 0 0 1px rgba(8, 11, 20, 1),
+          0 0 16px rgba(15, 23, 42, 0.9),
+          0 0 18px var(--glow);
+      }
+      .footer {
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: left;
+      }
+      @media (max-width: 640px) {
+        body {
+          padding: 8px 6px;
+        }
+        .card {
+          padding: 16px 14px;
+        }
+        .header {
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          text-align: center;
+        }
+        .title {
+          font-size: 18px;
+          text-align: center;
+        }
+        .status {
+          text-align: center;
+        }
+        .controls {
+          width: 100%;
+          justify-content: center;
+          gap: 10px;
+        }
+        .controls button {
+          width: 100%;
+        }
+        button {
+          padding: 10px 14px;
+        }
+        .footer {
+          text-align: center;
+        }
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="card">
+      <div class="header">
+        <h1 class="title">Start Your AI Demo</h1>
+        <div class="status" id="status">Idle</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn-start" id="start">Start Demo</button>
+        <button class="btn-stop" id="stop" disabled>End Demo</button>
+        <button class="btn-mute" id="mute">Mute</button>
+      </div>
+
+      <div class="footer">
+        This demo uses your microphone to simulate a real reminder call.
+      </div>
+    </div>
+
+    <script type="module">
+      import Vapi from "https://esm.sh/@vapi-ai/web";
+
+      const PUBLIC_KEY = "6bfca023-3a7f-4665-8ffe-1ebcc8774bef";
+      const ASSISTANT_ID = "840001ae-c56e-4f76-9344-540e2a9e5766";
+
+      const statusEl = document.getElementById("status");
+      const startBtn = document.getElementById("start");
+      const stopBtn = document.getElementById("stop");
+      const muteBtn = document.getElementById("mute");
+
+      const vapi = new Vapi(PUBLIC_KEY);
+      let muted = false;
+
+      function setStatus(text) {
+        statusEl.textContent = text;
+      }
+
+      startBtn.addEventListener("click", () => {
+        setStatus("Connecting...");
+        vapi.start(ASSISTANT_ID);
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+      });
+
+      stopBtn.addEventListener("click", () => {
+        vapi.stop();
+        setStatus("Idle");
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      });
+
+      muteBtn.addEventListener("click", () => {
+        muted = !muted;
+        vapi.setMuted(muted);
+        muteBtn.textContent = muted ? "Unmute" : "Mute";
+      });
+
+      vapi.on("call-start", () => setStatus("In Call"));
+      vapi.on("call-end", () => setStatus("Idle"));
+      vapi.on("message", () => {});
+    </script>
+  </body>
+</html>
