@@ -60,12 +60,6 @@
         line-height: 1.55;
         color: var(--muted);
       }
-      .status {
-        font-size: 14px;
-        color: var(--muted);
-        text-align: left;
-        margin-top: 10px;
-      }
       .controls {
         display: flex;
         flex-wrap: wrap;
@@ -133,9 +127,6 @@
         .subtitle {
           text-align: center;
         }
-        .status {
-          text-align: left;
-        }
         .controls {
           width: 100%;
           justify-content: space-between;
@@ -198,7 +189,6 @@
         This demo uses your microphone to simulate a real AI phone call.
       </div>
 
-      <div class="status" id="status">Idle</div>
     </div>
 
     <script type="module">
@@ -207,7 +197,6 @@
       const PUBLIC_KEY = "6bfca023-3a7f-4665-8ffe-1ebcc8774bef";
       const ASSISTANT_ID = "840001ae-c56e-4f76-9344-540e2a9e5766";
 
-      const statusEl = document.getElementById("status");
       const startBtn = document.getElementById("start");
       const stopBtn = document.getElementById("stop");
       const muteBtn = document.getElementById("mute");
@@ -215,12 +204,12 @@
       const vapi = new Vapi(PUBLIC_KEY);
       let muted = false;
 
-      function setStatus(text) {
-        statusEl.textContent = text;
+      function setStartLabel(text) {
+        startBtn.textContent = text;
       }
 
       startBtn.addEventListener("click", () => {
-        setStatus("Connecting...");
+        setStartLabel("Connecting...");
         vapi.start(ASSISTANT_ID);
         startBtn.disabled = true;
         stopBtn.disabled = false;
@@ -228,7 +217,7 @@
 
       stopBtn.addEventListener("click", () => {
         vapi.stop();
-        setStatus("Idle");
+        setStartLabel("Start Demo");
         startBtn.disabled = false;
         stopBtn.disabled = true;
       });
@@ -239,8 +228,8 @@
         muteBtn.textContent = muted ? "Unmute" : "Mute";
       });
 
-      vapi.on("call-start", () => setStatus("In Call"));
-      vapi.on("call-end", () => setStatus("Idle"));
+      vapi.on("call-start", () => setStartLabel("In Demo"));
+      vapi.on("call-end", () => setStartLabel("Start Demo"));
       vapi.on("message", () => {});
     </script>
   </body>
