@@ -47,12 +47,25 @@
         margin-bottom: 20px;
         text-align: left;
       }
+      .label {
+        margin: 0 0 6px;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(148, 163, 184, 0.9);
+      }
       .title {
         margin: 0;
         font-size: 24px;
         letter-spacing: -0.02em;
         text-align: left;
         width: 100%;
+      }
+      .subtitle {
+        margin: 10px 0 0;
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: var(--muted);
       }
       .status {
         font-size: 14px;
@@ -121,8 +134,14 @@
           gap: 6px;
           text-align: center;
         }
+        .label {
+          text-align: center;
+        }
         .title {
           font-size: 20px;
+          text-align: center;
+        }
+        .subtitle {
           text-align: center;
         }
         .status {
@@ -167,7 +186,13 @@
   <body>
     <div class="card">
       <div class="header">
-        <h1 class="title">Client Reactivator Demo</h1>
+        <div>
+          <p class="label">Voice Agent</p>
+          <h1 class="title">Appointment Reminder Demo</h1>
+          <p class="subtitle">
+            Confirms upcoming appointments and handles reschedules to reduce no-shows.
+          </p>
+        </div>
         <div class="status" id="status">Idle</div>
       </div>
 
@@ -178,7 +203,7 @@
       </div>
 
       <div class="footer">
-        This demo uses your microphone to simulate a real AI phone call.
+        This demo uses your microphone to simulate a real reminder call.
       </div>
     </div>
 
@@ -186,7 +211,7 @@
       import Vapi from "https://esm.sh/@vapi-ai/web";
 
       const PUBLIC_KEY = "6bfca023-3a7f-4665-8ffe-1ebcc8774bef";
-      const ASSISTANT_ID = "840001ae-c56e-4f76-9344-540e2a9e5766";
+      const ASSISTANT_ID = "d555566a-91e0-4d02-aee4-a58b54fbffea";
 
       const statusEl = document.getElementById("status");
       const startBtn = document.getElementById("start");
