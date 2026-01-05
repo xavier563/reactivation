@@ -67,8 +67,8 @@
         text-align: left;
         width: 100%;
         position: absolute;
-        top: 24px;
-        right: 28px;
+        top: 20px;
+        right: 20px;
       }
       .controls {
         display: flex;
@@ -147,11 +147,15 @@
           justify-content: center;
           gap: 12px;
         }
-        .controls button {
-          width: 100%;
-        }
         button {
           padding: 12px 16px;
+        }
+        .controls .btn-start,
+        .controls .btn-stop {
+          width: auto;
+        }
+        .controls .btn-mute {
+          flex-basis: 100%;
         }
         .footer {
           text-align: center;
