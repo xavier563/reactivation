@@ -144,7 +144,7 @@
         }
         .controls {
           width: 100%;
-          justify-content: center;
+          justify-content: space-between;
           gap: 12px;
         }
         button {
@@ -152,7 +152,8 @@
         }
         .controls .btn-start,
         .controls .btn-stop {
-          width: auto;
+          flex: 1 1 calc(50% - 6px);
+          min-width: 0;
         }
         .controls .btn-mute {
           flex-basis: 100%;
